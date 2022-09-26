@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 export function ContactForm({ onSubmit }) {
   const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+  const [phone, setPhone] = useState('');
   const [id, setId] = useState('');
 
   const handleChangeName = evt => {
@@ -14,18 +14,18 @@ export function ContactForm({ onSubmit }) {
   };
 
   const handleChangeNumber = evt => {
-    setNumber(evt.target.value);
+    setPhone(evt.target.value);
   };
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    onSubmit({ name, number, id });
+    onSubmit({ name, phone, id });
     reset();
   };
 
   const reset = () => {
     setName('');
-    setNumber('');
+    setPhone('');
     setId('');
   };
 
@@ -51,9 +51,9 @@ export function ContactForm({ onSubmit }) {
           <input
             className={css.input}
             type="tel"
-            value={number}
+            value={phone}
             onChange={handleChangeNumber}
-            name="number"
+            name="phone"
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             required
@@ -70,6 +70,6 @@ export function ContactForm({ onSubmit }) {
 ContactForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   name: PropTypes.string,
-  number: PropTypes.number,
+  phone: PropTypes.number,
   id: PropTypes.string,
 };

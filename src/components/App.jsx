@@ -5,38 +5,46 @@ import { ContactForm } from './ContactForm/contactForm';
 import ContactList from './ContactList/contactList';
 import PropTypes from 'prop-types';
 import Filter from './Filter/filter';
-import { addContact, deleteContact } from 'redux/itemsSlice';
+import { fetchContacts, addContact, deleteContact } from 'redux/operation';
 import { setFilter } from 'redux/filterSlice';
+import {
+  selectItems,
+  selectFilter,
+  selectIsLoading,
+  selectError,
+} from '../redux/selectors';
 
 export const App = () => {
   const dispatch = useDispatch();
 
-  const filterCont = useSelector(state => state.filter);
+  const filterCont = useSelector(selectFilter);
+  const items = useSelector(selectItems);
+  const isLoading = useSelector(selectIsLoading);
+  const error = useSelector(selectError);
 
-  const itemContact = useSelector(state => state.items);
-
-  const addContactList = data => {
-    const searchName = data.name.toLowerCase();
-    itemContact.find(contact => contact.name.toLowerCase() === searchName)
+  const addContactList = ({ name, phone }) => {
+    const searchName = name.toLowerCase();
+    items.find(contact => contact.name.toLowerCase() === searchName)
       ? alert('contact is already in contacts')
-      : dispatch(addContact(data));
+      : dispatch(addContact({ name, phone }));
   };
 
-  const handleDelete = id => {
-    dispatch(deleteContact(id));
+  const handleDelete = itemId => {
+    dispatch(deleteContact(itemId));
   };
+  // const handleDelete = (item.id) => dispatch(deleteContact(item.id));
 
   const handleFindChange = evt => {
     dispatch(setFilter(evt.target.value));
   };
 
-  const filterContact = itemContact.filter(item =>
-    item.name.toLowerCase().includes(filterCont.toLowerCase())
-  );
+  // const filterContact = items.filter(item =>
+  //   item.name.toLowerCase().includes(filterCont.toLowerCase())
+  // );
 
   useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(itemContact));
-  }, [itemContact]);
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   return (
     <div>
@@ -44,7 +52,9 @@ export const App = () => {
       <ContactForm onSubmit={addContactList} />
       <h2>Contacts</h2>
       <Filter value={filterCont} onChange={handleFindChange} />
-      <ContactList contacts={filterContact} onLeaveFeedback={handleDelete} />
+      {isLoading && !error && <b>Request in progress...</b>}
+      {error && <p>{error}</p>}
+      <ContactList contacts={items} onLeaveFeedback={handleDelete} />
       <GlobalStyle />
     </div>
   );

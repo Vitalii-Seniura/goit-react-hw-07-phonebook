@@ -7,7 +7,7 @@ const ContactList = ({ contacts, onLeaveFeedback }) => {
       {contacts.map(contact => {
         return (
           <li key={contact.id} className={css.item}>
-            {contact.name}: {contact.number}
+            {contact.name}: {contact.phone}
             <button
               className={css.btn}
               type="button"
