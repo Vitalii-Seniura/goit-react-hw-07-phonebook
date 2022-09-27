@@ -32,15 +32,14 @@ export const App = () => {
   const handleDelete = itemId => {
     dispatch(deleteContact(itemId));
   };
-  // const handleDelete = (item.id) => dispatch(deleteContact(item.id));
 
   const handleFindChange = evt => {
     dispatch(setFilter(evt.target.value));
   };
 
-  // const filterContact = items.filter(item =>
-  //   item.name.toLowerCase().includes(filterCont.toLowerCase())
-  // );
+  const filterContact = items.filter(item =>
+    item.name.toLowerCase().includes(filterCont.toLowerCase())
+  );
 
   useEffect(() => {
     dispatch(fetchContacts());
@@ -52,9 +51,9 @@ export const App = () => {
       <ContactForm onSubmit={addContactList} />
       <h2>Contacts</h2>
       <Filter value={filterCont} onChange={handleFindChange} />
-      {isLoading && !error && <b>Request in progress...</b>}
+      {isLoading && !error && <b>Request in progress.....</b>}
       {error && <p>{error}</p>}
-      <ContactList contacts={items} onLeaveFeedback={handleDelete} />
+      <ContactList contacts={filterContact} onLeaveFeedback={handleDelete} />
       <GlobalStyle />
     </div>
   );
