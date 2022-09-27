@@ -5,32 +5,26 @@ import { ContactForm } from './ContactForm/contactForm';
 import ContactList from './ContactList/contactList';
 import PropTypes from 'prop-types';
 import Filter from './Filter/filter';
-import { fetchContacts, addContact, deleteContact } from 'redux/operation';
 import { setFilter } from 'redux/filterSlice';
-import {
-  selectItems,
-  selectFilter,
-  selectIsLoading,
-  selectError,
-} from '../redux/selectors';
+import { operations, selectors } from '../redux';
 
 export const App = () => {
   const dispatch = useDispatch();
 
-  const filterCont = useSelector(selectFilter);
-  const items = useSelector(selectItems);
-  const isLoading = useSelector(selectIsLoading);
-  const error = useSelector(selectError);
+  const filterCont = useSelector(selectors.selectFilter);
+  const items = useSelector(selectors.selectItems);
+  const isLoading = useSelector(selectors.selectIsLoading);
+  const error = useSelector(selectors.selectError);
 
   const addContactList = ({ name, phone }) => {
     const searchName = name.toLowerCase();
     items.find(contact => contact.name.toLowerCase() === searchName)
       ? alert('contact is already in contacts')
-      : dispatch(addContact({ name, phone }));
+      : dispatch(operations.addContact({ name, phone }));
   };
 
   const handleDelete = itemId => {
-    dispatch(deleteContact(itemId));
+    dispatch(operations.deleteContact(itemId));
   };
 
   const handleFindChange = evt => {
@@ -42,7 +36,7 @@ export const App = () => {
   );
 
   useEffect(() => {
-    dispatch(fetchContacts());
+    dispatch(operations.fetchContacts());
   }, [dispatch]);
 
   return (
